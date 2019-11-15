@@ -92,8 +92,8 @@ class VideoClassController extends Controller
             return response()->json([], $this->unAuthorized); 
         }
         $with = [
-            'feedback' => function($query){
-                return $query;
+            'feedbacks' => function($query){
+                return $query->with(['user'=>function($query){return $query;}]);
             },
             'student_profile' => function($query){
                 return $query->with(['user'=>function($query){return $query;}]);
@@ -213,10 +213,9 @@ class VideoClassController extends Controller
         if (!$video_class->duration)
             return response()->json(new ErrorResponse("this class has been not ended yet", "400", []), $this->badRequest);
         
-        $feedback = $video_class->feedback;
-        if (!$feedback) 
-            $feedback = new Feedback;
+        $feedback = new Feedback;
         $input['video_class_id'] = $video_class_id;
+        $input['user_id'] = $user->id;
         $feedback->fill($input);
         $feedback->save();
         return response()->json($feedback, $this->successStatus);

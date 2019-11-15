@@ -21,8 +21,8 @@ class VideoClass extends Model
         return $this->belongsTo(StudentProfile::class);
     }
 
-    public function feedback(){
-        return $this->hasOne(Feedback::class);
+    public function feedbacks(){
+        return $this->hasMany(Feedback::class);
     }
 
     public function price() {
