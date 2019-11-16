@@ -196,20 +196,8 @@ class VideoClassController extends Controller
             PaymentRepository::updateBalance($video_class->student_profile->parent_profile->user_id, -1 * $amount);
             return response()->json(new ErrorResponse($e->getMessage(), "400", []), $this->badRequest);
         }
-
-        $with = [
-            'feedbacks' => function($query){
-                return $query->with(['user'=>function($query){return $query;}]);
-            },
-            'student_profile' => function($query){
-                return $query->with(['user'=>function($query){return $query;}]);
-            }, 
-            'tutor_profile' => function($query){
-                return $query->with(['user'=> function($query){return $query;}]);;
-            }
-        ];
-        $video_class_info = VideoClass::where('call_id', $video_class->call_id)->with($with)->first();
-        return response()->json($video_class_info, $this->successStatus);
+        
+        return response()->json($video_class, $this->successStatus); 
     }
 
     /**  post
